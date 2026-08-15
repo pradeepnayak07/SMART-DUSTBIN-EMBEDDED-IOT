@@ -1,0 +1,114 @@
+SMART DUSTBIN - SENSOR TEST RESULTS
+
+Project:
+Smart Dustbin – Industry-Oriented Embedded System
+
+Controller:
+ESP32
+
+Simulation:
+Wokwi
+
+IoT Platform:
+Blynk IoT
+
+
+==================================================
+TEST 1 - NORMAL BIN CONDITION
+==================================================
+
+Waste Distance: 15.08 cm
+Bin Status: NORMAL
+Bin Full: 0
+Green LED: ON
+Red LED: OFF
+Buzzer: OFF
+
+Result: PASS
+
+
+==================================================
+TEST 2 - FULL BIN CONDITION
+==================================================
+
+Waste Distance: 4.94 cm
+Bin Status: BIN FULL
+Bin Full: 1
+Green LED: OFF
+Red LED: ON
+Buzzer: ON
+Lid Status: CLOSED
+
+Result: PASS
+
+
+==================================================
+TEST 3 - HAND/OBJECT DETECTION
+==================================================
+
+Detection Range: <= 20 cm
+Lid: OPEN
+Automatic Lid Close: 2 seconds
+
+Result: PASS
+
+
+==================================================
+TEST 4 - FILL PERCENTAGE
+==================================================
+
+Bin Height: 20 cm
+
+Example Waste Distance: 7.99 cm
+
+Fill Percentage:
+((20 - 7.99) / 20) x 100
+
+Fill Percentage: approximately 60%
+
+Result: PASS
+
+
+==================================================
+TEST 5 - BLYNK INTEGRATION
+==================================================
+
+V0 - Waste Distance
+V1 - Bin Status
+V2 - Lid Status
+V3 - Bin Full
+
+Result: PASS
+
+
+==================================================
+TEST 6 - NOTIFICATION
+==================================================
+
+Condition:
+Bin Full = 1
+
+Mobile Notification: SUCCESS
+Email Notification: SUCCESS
+
+Result: PASS
+
+
+==================================================
+FINAL TEST RESULT
+==================================================
+
+Hand/Object Detection: PASS
+Automatic Lid Opening: PASS
+Automatic Lid Closing: PASS
+Waste Level Monitoring: PASS
+Fill Percentage Calculation: PASS
+Full Bin Detection: PASS
+Green LED Alert: PASS
+Red LED Alert: PASS
+Buzzer Alert: PASS
+Blynk Dashboard: PASS
+Mobile Notification: PASS
+Email Notification: PASS
+
+Overall Project Status: PASS
