@@ -1,0 +1,26 @@
+# VS Code
+.vscode/
+
+# Arduino
+*.tmp
+*.bak
+
+# Build files
+build/
+dist/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Secrets / credentials
+.env
+.env.*
+secrets.h
+
+# Temporary files
+*.swp
+*.swo

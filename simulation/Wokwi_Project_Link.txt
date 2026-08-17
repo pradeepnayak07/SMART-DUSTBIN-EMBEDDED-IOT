@@ -1,0 +1,46 @@
+SMART DUSTBIN – WOKWI SIMULATION
+
+Project Name:
+Smart Dustbin – Industry-Oriented Embedded IoT System
+
+Simulation Platform:
+Wokwi
+
+Wokwi Project Link:
+https://wokwi.com/projects/472076620747237377
+
+Controller:
+ESP32
+
+Simulated Components:
+- ESP32
+- HC-SR04 Ultrasonic Sensor ×2
+- SG90 Servo Motor
+- Green LED
+- Red LED
+- Buzzer
+
+Main Simulation Functions:
+- Hand/Object Detection
+- Automatic Lid Opening
+- Automatic Lid Closing
+- Waste-Level Monitoring
+- Fill Percentage Calculation
+- Full-Bin Detection
+- LED Alert
+- Buzzer Alert
+- Blynk IoT Monitoring
+
+Detection Settings:
+Hand/Object Detection: <= 20 cm
+Full-Bin Threshold: <= 10 cm
+Bin Height: 20 cm
+
+Blynk Datastreams:
+V0 – Waste Distance
+V1 – Bin Status
+V2 – Lid Status
+V3 – Bin Full
+
+Simulation Status:
+PASS
