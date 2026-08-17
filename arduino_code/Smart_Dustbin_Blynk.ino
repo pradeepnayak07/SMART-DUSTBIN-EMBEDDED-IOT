@@ -1,12 +1,12 @@
 #define BLYNK_TEMPLATE_ID "TMPL3ReLJEQBg"
 #define BLYNK_TEMPLATE_NAME "Smart Dustbin"
-#define BLYNK_AUTH_TOKEN ""
+#define BLYNK_AUTH_TOKEN "YOUR_AUTH_TOKEN"
+
 #define BLYNK_PRINT Serial
 
 #include <WiFi.h>
 #include <BlynkSimpleEsp32.h>
 #include <ESP32Servo.h>
-
 
 // =====================================================
 // WIFI
@@ -47,7 +47,7 @@ const float BIN_HEIGHT = 20.0;
 const int LID_CLOSED_ANGLE = 0;
 const int LID_OPEN_ANGLE = 90;
 
-// Lid stays open for 2 seconds
+// Lid open duration
 const unsigned long LID_OPEN_TIME = 2000;
 
 // =====================================================
@@ -119,6 +119,21 @@ float calculateFillPercentage(float distance)
   }
 
   return percentage;
+}
+
+// =====================================================
+// BUZZER CONTROL
+// =====================================================
+
+void buzzerON()
+{
+  // Generate audible 2 kHz tone
+  tone(BUZZER_PIN, 2000);
+}
+
+void buzzerOFF()
+{
+  noTone(BUZZER_PIN);
 }
 
 // =====================================================
@@ -210,7 +225,7 @@ void updateBlynk()
 void processDustbin()
 {
   // ---------------------------------------------------
-  // Read Sensors
+  // READ SENSORS
   // ---------------------------------------------------
 
   handDistance = readDistance(
@@ -222,14 +237,14 @@ void processDustbin()
       WASTE_ECHO_PIN);
 
   // ---------------------------------------------------
-  // Calculate Fill Percentage
+  // CALCULATE FILL PERCENTAGE
   // ---------------------------------------------------
 
   fillPercentage =
       calculateFillPercentage(wasteDistance);
 
   // ---------------------------------------------------
-  // Detect Full Bin
+  // DETECT FULL BIN
   // ---------------------------------------------------
 
   if (wasteDistance <= FULL_BIN_THRESHOLD)
@@ -242,7 +257,7 @@ void processDustbin()
   }
 
   // ---------------------------------------------------
-  // Hand/Object Detection
+  // HAND / OBJECT DETECTION
   // ---------------------------------------------------
 
   Serial.print("Hand Distance: ");
@@ -250,8 +265,11 @@ void processDustbin()
   Serial.println(" cm");
 
   /*
-   * If bin is FULL, keep the lid closed.
-   * Otherwise detect hand/object.
+   * If bin is FULL:
+   * Keep lid closed.
+   *
+   * Otherwise:
+   * Detect hand/object and open lid.
    */
 
   if (!binFull)
@@ -269,7 +287,7 @@ void processDustbin()
   }
 
   // ---------------------------------------------------
-  // Lid Timer
+  // LID TIMER
   // ---------------------------------------------------
 
   handleLidTimer();
@@ -280,9 +298,12 @@ void processDustbin()
 
   if (binFull)
   {
+    // Full condition
     digitalWrite(RED_LED_PIN, HIGH);
     digitalWrite(GREEN_LED_PIN, LOW);
-    digitalWrite(BUZZER_PIN, HIGH);
+
+    // Audible buzzer
+    buzzerON();
 
     // Send notification only once
     if (!previousFullState)
@@ -303,15 +324,18 @@ void processDustbin()
   }
   else
   {
+    // Normal condition
     digitalWrite(RED_LED_PIN, LOW);
     digitalWrite(GREEN_LED_PIN, HIGH);
-    digitalWrite(BUZZER_PIN, LOW);
+
+    // Turn buzzer OFF
+    buzzerOFF();
 
     previousFullState = false;
   }
 
   // ---------------------------------------------------
-  // Serial Monitor
+  // SERIAL MONITOR
   // ---------------------------------------------------
 
   Serial.print("Waste Distance: ");
@@ -344,6 +368,17 @@ void processDustbin()
     Serial.println("CLOSED");
   }
 
+  Serial.print("Buzzer Status: ");
+
+  if (binFull)
+  {
+    Serial.println("ON");
+  }
+  else
+  {
+    Serial.println("OFF");
+  }
+
   Serial.println("---------------------------------");
 }
 
@@ -356,7 +391,7 @@ void setup()
   Serial.begin(115200);
 
   // ---------------------------------------------------
-  // Pin Modes
+  // PIN MODES
   // ---------------------------------------------------
 
   pinMode(HAND_TRIG_PIN, OUTPUT);
@@ -367,18 +402,20 @@ void setup()
 
   pinMode(GREEN_LED_PIN, OUTPUT);
   pinMode(RED_LED_PIN, OUTPUT);
+
   pinMode(BUZZER_PIN, OUTPUT);
 
   // ---------------------------------------------------
-  // Initial State
+  // INITIAL STATE
   // ---------------------------------------------------
 
   digitalWrite(GREEN_LED_PIN, HIGH);
   digitalWrite(RED_LED_PIN, LOW);
-  digitalWrite(BUZZER_PIN, LOW);
+
+  buzzerOFF();
 
   // ---------------------------------------------------
-  // Servo
+  // SERVO
   // ---------------------------------------------------
 
   lidServo.setPeriodHertz(50);
@@ -393,7 +430,7 @@ void setup()
   lidOpen = false;
 
   // ---------------------------------------------------
-  // Startup Information
+  // STARTUP INFORMATION
   // ---------------------------------------------------
 
   Serial.println();
@@ -426,24 +463,25 @@ void setup()
   Serial.print(LID_OPEN_TIME / 1000);
   Serial.println(" seconds");
 
+  Serial.println("Buzzer frequency: 2000 Hz");
+
   Serial.println("---------------------------------");
 
   // ---------------------------------------------------
-  // Blynk
+  // BLYNK
   // ---------------------------------------------------
 
   Serial.println("Connecting to Blynk...");
 
-Blynk.begin(
-    BLYNK_AUTH_TOKEN,
-    ssid,
-    pass
-);
+  Blynk.begin(
+      BLYNK_AUTH_TOKEN,
+      ssid,
+      pass);
 
   Serial.println("Blynk connection initialized");
 
   // ---------------------------------------------------
-  // Blynk Timer
+  // BLYNK TIMER
   // ---------------------------------------------------
 
   timer.setInterval(
