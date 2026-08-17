@@ -1,0 +1,33 @@
+# Arduino / IDE
+*.hex
+*.elf
+*.eep
+*.map
+*.bin
+
+# Build output
+build/
+dist/
+out/
+
+# VS Code
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+
+# Secrets / credentials
+.env
+*.env
+secrets.h
+credentials.h
